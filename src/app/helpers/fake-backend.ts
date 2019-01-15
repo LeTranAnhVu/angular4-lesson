@@ -5,11 +5,11 @@ export function fakeBackendFactory(
   backend: MockBackend,
   options: BaseRequestOptions) {
 
-  let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik1vc2ggSGFtZWRhbmkiLCJhZG1pbiI6dHJ1ZX0.iy8az1ZDe-_hS8GLDKsQKgPHvWpHl0zkQBqy1QIPOkA';
-
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik1vc2ggSGFtZWRhbmkiLCJhZG1pbiI6dHJ1ZX0.iy8az1ZDe-_hS8GLDKsQKgPHvWpHl0zkQBqy1QIPOkA';
+  const token2 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6InZ1bGUiLCJhZG1pbiI6ZmFsc2V9.jpLjdrRX6qqCFy9OnZtezCBDTyL2jhzLK0EYU075oCs';
   backend.connections.subscribe((connection: MockConnection) => {
-    // We are using the setTimeout() function to simulate an 
-    // asynchronous call to the server that takes 1 second. 
+    // We are using the setTimeout() function to simulate an
+    // asynchronous call to the server that takes 1 second.
     setTimeout(() => {
       //
       // Fake implementation of /api/authenticate
@@ -24,6 +24,12 @@ export function fakeBackendFactory(
               status: 200,
               body: { token: token }
             })));
+        } else if (body.email === 'vule' && body.password === '1234') {
+          connection.mockRespond(new Response(
+            new ResponseOptions({
+              status: 200,
+              body: { token: token2 }
+            })));
         } else {
           connection.mockRespond(new Response(
             new ResponseOptions({ status: 404 })
@@ -33,7 +39,7 @@ export function fakeBackendFactory(
 
 
 
-      // 
+      //
       // Fake implementation of /api/orders
       //
       if (connection.request.url.endsWith('/api/orders') &&
